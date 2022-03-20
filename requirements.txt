@@ -120,7 +120,7 @@ tabulate==0.8.9
 tellme==0.2.6
 toml==0.10.2
 Twisted==22.2.0
-Twisted-iocsupport==1.0.2
+twisted-iocsupport==1.0.2
 txaio==22.2.1
 typing_extensions==4.1.1
 urllib3==1.26.8
