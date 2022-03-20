@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{%load crispy_forms_tags%}
+
+  
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css "   rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">Student Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button> 
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav active">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Options
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'books'  %}">Books</a></li>
+                <li><a class="dropdown-item" href="{% url 'conversion'  %}">Conversion</a></li>
+                <li><a class="dropdown-item" href="{% url 'dictionary'  %}">Dictionary</a></li>
+                <li><a class="dropdown-item" href="{%  url   'homework'   %}">Homework</a></li>
+                <li><a class="dropdown-item" href="{% url 'notes'   %}">Notes</a></li>
+                <li><a class="dropdown-item" href="{% url 'todo'  %}">Todo</a></li>
+                <li><a class="dropdown-item" href="{% url 'wiki' %}">Wikipedia</a></li>
+                <li><a class="dropdown-item" href="{% url 'youtube' %}">Youtube</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout'  %}">Logout</a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+</body>
+<br/>
+
+
+
+<div class="container">
+    {% if not homeworks_done   %}
+    <table class="table table-striped table-bordered table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Due</th>
+                <th scope="col">Status</th>
+                <th scope="col">Delete</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+          <tr>
+
+            {% for homework,serial in homeworks  %}
+            <th scope="row">{{serial}}</th>
+            <td>{{homework.subject}}</td>
+            <td>{{homework.title}}</td>
+            <td>{{homework.description}}</td>
+            <td>{{homework.due}}</td>
+            <td>
+              <a href="{% url  'update_homework' homework.id   %}">
+                <div class="form-check">
+                  {%if homework.is_finished == True%}
+                  <input class="form-check-input" type="checkbox" value="" checked id="{{homework.id}}">
+                  {% else %}
+                  <input class="form-check-input" type="checkbox" value="" id="{{homework.id}}">
+                  {% endif  %}
+                  <label cworklass="form-check-label text-light" for="flexCheckDefault">
+                      Mark as Completed
+                  </label>
+
+                </div>
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'delete_homework' homework.id  %}"><i class="bi bi-trash bi-2x"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+
+
+
+
+
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+    
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+
+            </td>
+          </tr>
+            {% endfor  %}
+
+
+
+
+
+
+            
+
+        </tbody>
+    </table>
+    {% else  %}
+    <h4>All Homeworks are completed,Create to have more</h4>
+    {% endif  %}
+
+
+
+</div>
+<br>
+<br>
+<div class="container">
+  <form method="POST">
+    {% csrf_token  %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Create Homework</legend>
+      {{ form|crispy  }}
+    </fieldset>
+    <div class="form-group">
+
+
+
+      <button href="" class="btn btn btn-outline-info">
+
+
+        Create
+
+
+        </button>
+    </div>
+  </form>
+
+</div>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

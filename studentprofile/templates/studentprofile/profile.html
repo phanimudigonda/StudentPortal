@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+{%load crispy_forms_tags%}
+  
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css "   rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">Student Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav active">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            {% if user.is_authenticated  %}
+            <li class="nav-item">
+              <a class="nav-link" href="#">Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Options
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'books' %}">Books</a></li>
+                <li><a class="dropdown-item" href="{% url 'conversion'  %}">Conversion</a></li>
+                <li><a class="dropdown-item" href="{% url 'dictionary'  %}">Dictionary</a></li>
+                <li><a class="dropdown-item" href="{%   url 'homework' %}">Homework</a></li>
+                <li><a class="dropdown-item" href="{% url 'notes'  %}">Notes</a></li>
+                <li><a class="dropdown-item" href="{% url 'todo'  %}">Todo</a></li>
+                <li><a class="dropdown-item" href="{% url 'wiki' %}">Wikipedia</a></li>
+                <li><a class="dropdown-item" href="{% url 'youtube' %}">Youtube</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register'  %}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="text-center">
+
+    <div class="container">
+        {% if not todos_done %}
+        <h2>Due ToDos</h2>
+        <table class="table table-striped table-bordered table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for todo,serial in todos %}
+                    <th scope="row">{{serial}}</th>
+                    <td>{{todo.title}}</td>
+                    <td>
+                        <a href="{% url 'update_todo' todo.id %}">
+                            <div class="form-check">
+                                {%if todo.is_finished == True%}
+                                <input class="form-check-input" type="checkbox" value="" checked id={{todo.id}}>
+                                {%else%}
+                                <input class="form-check-input" type="checkbox" value="" id={{todo.id}}>
+                                {%endif%}
+                                <label class="form-check-label text-light" for="flexCheckDefault">
+                                    Mark as Completed
+                                </label>
+                            </div>
+                        </a>
+                    </td>
+
+                    <td><a href="{% url 'delete_todo' todo.id%}"><i class="fa fa-trash fa-2x"></i></a></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        {% else %}
+        <h3>All To dos are completed!!!!</h3>
+
+        {% endif %}
+        <a href="{% url 'todo' %}" class="btn btn-danger">To Do</a>
+        <br><br>
+        {% if not homeworks_done %}
+        <h2>Due Homeworks</h2>
+        <table class="table table-striped table-bordered table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Due</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for homework,serial in homeworks %}
+                    <th scope="row">{{serial}}</th>
+                    <td>{{homework.subject}}</td>
+                    <td>{{homework.title}}</td>
+                    <td>{{homework.description}}</td>
+                    <td>{{homework.due}}</td>
+
+                    <td>
+                        <a href="{% url 'update_homework' homework.id %}">
+                            <div class="form-check">
+                                {%if homework.is_finished == True%}
+                                <input class="form-check-input" type="checkbox" value="" checked id={{todo.id}}>
+                                {%else%}
+                                <input class="form-check-input" type="checkbox" value="" id={{todo.id}}>
+                                {%endif%}
+                                <label class="form-check-label text-light" for="flexCheckDefault">
+                                    Mark as Completed
+                                </label>
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+
+                      <a href="{% url 'delete_homework' homework.id%}"><i class="fa fa-trash fa-2x"></i></a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        {% else %}
+        <h3>All homeworks are completed!!!!</h3>
+
+        {% endif %}
+        <a href="{% url 'homework' %}" class="btn btn-danger">Homeworks</a>
+    </div>
+</section>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
