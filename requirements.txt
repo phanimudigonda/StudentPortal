@@ -40,7 +40,6 @@ soupsieve==2.3.1
 sqlparse==0.4.2
 stdlib-list==0.8.0
 toml==0.10.2
-twisted-iocpsupport==1.0.2
 tzdata==2021.5
 urllib3==1.26.8
 websockets==10.1
